@@ -9,11 +9,12 @@ import SwiftUI
 
 struct StartView: View {
     @Environment(GalleryDataStore.self) private var galleryDataStore
-    @State private var selectedGallery: Gallery?
+    @Environment(PathStore.self) private var pathStore
     var body: some View {
+        @Bindable var pathStore = pathStore
         TabView {
             Tab("Gallery",systemImage: "building.columns"){
-                List(galleryDataStore.getGalleries(), id: \.self, selection: $selectedGallery){ gallery in
+                List(galleryDataStore.getGalleries(), id: \.self, selection: $pathStore.selectedGallery){ gallery in
                     VStack {
                         Text(gallery.name)
                             .font(.largeTitle)
@@ -25,14 +26,14 @@ struct StartView: View {
                     }.frame(height:80)
                 }
             }
-            if selectedGallery == nil {
+            if pathStore.selectedGallery == nil {
                 Tab("No gallery",systemImage: "paintpalette.fill"){
                     Text("No gallery selected")
                 }
             }
             else {
-                Tab(selectedGallery!.name, systemImage: "paintpalette.fill"){
-                    GalleryDetailView(gallery: selectedGallery!)
+                Tab(pathStore.selectedGallery!.name, systemImage: "paintpalette.fill"){
+                    GalleryDetailView(gallery: pathStore.selectedGallery!)
                 }
             }
         }

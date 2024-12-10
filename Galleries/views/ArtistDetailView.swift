@@ -1,41 +1,41 @@
 //
-//  GalleryDetailView.swift
+//  ArtistDetailView.swift
 //  Galleries
 //
-//  Created by Jelle Goemaere on 05/12/2024.
+//  Created by Jelle Goemaere on 10/12/2024.
 //
 
 import SwiftUI
 
-struct GalleryDetailView: View {
+struct ArtistDetailView: View {
+    var artist: Artist
     @Environment(PathStore.self) private var pathStore
-    @State private var selectedArtist: Artist?
-    var gallery: Gallery
+    @State private var selectedArtwork: Artwork?
     var body: some View {
         @Bindable var pathStore = pathStore
         NavigationStack(path: $pathStore.path) {
         VStack {
-            Text(gallery.name)
+            Text(artist.name)
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .foregroundColor(Color.brown)
             Divider()
-            Text(gallery.location)
+            Text(artist.nationality)
                 .fontWeight(.bold)
-            Text(gallery.description)
+            Text(artist.description)
             Divider()
-            Text("List of artists")
+            Text("List of art")
                 .foregroundColor(Color.brown)
             Divider()
-                List(gallery.artists, id:\.self, selection: $selectedArtist) { artist in
-                    NavigationLink(value: Route.artist(artist)){
+            List(artist.artworks, id:\.self, selection: $selectedArtwork) { artwork in
+                    NavigationLink(value: Route.artwork(artwork)){
                         VStack {
-                            Text(artist.name)
+                            Text(artwork.title)
                                 .foregroundColor(Color.brown)
                                 .fontWeight(.bold)
-                            Text(artist.nationality)
+                            Text(artwork.description)
                                 .foregroundColor(Color.gray)
-                        }
+                        }.frame(height:80)
                     }
                 }.navigationDestination(for:Route.self){ route in
                     switch route {
@@ -49,4 +49,3 @@ struct GalleryDetailView: View {
         }
     }
 }
-
